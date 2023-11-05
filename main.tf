@@ -97,7 +97,7 @@ resource "azurerm_lb_rule" "lbnatrule" {
 resource "azurerm_virtual_machine_scale_set" "vmss" {
  name                = "vmscaleset"
  location            = var.location
-# resource_group_name = azurerm_resource_group.vmss.name
+ resource_group_name = azurerm_resource_group.vmss.name
  upgrade_policy_mode = "Manual"
 
  sku {
@@ -156,7 +156,7 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
 resource "azurerm_public_ip" "jumpbox" {
  name                         = "jumpbox-public-ip"
  location                     = var.location
-# resource_group_name          = azurerm_resource_group.vmss.name
+ resource_group_name          = azurerm_resource_group.vmss.name
  allocation_method            = "Static"
  domain_name_label            = "${random_string.fqdn.result}-ssh"
  tags                         = var.tags
