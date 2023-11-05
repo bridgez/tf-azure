@@ -16,23 +16,7 @@ terraform {
     }
   
 }
-# Following used for cloud auth
 
-variable "ARM_CLIENT_ID" {
-  description = "ARM_CLIENT_ID"
-}
-
-variable "ARM_CLIENT_SECRET" {
-  description = "client secret"
-}
-
-variable "ARM_SUBSCRIPTION_ID" {
-  description = "AWS DEFAULT REGION"
-}
-
-variable "ARM_TENANT_ID" {
-  description = "tenant id"
-}
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
@@ -115,4 +99,20 @@ resource "azurerm_linux_virtual_machine" "main" {
     }
   }
 }
+# Following used for cloud auth
 
+variable "ARM_CLIENT_ID" {
+  description = "ARM_CLIENT_ID"
+}
+
+variable "ARM_CLIENT_SECRET" {
+  description = "client secret"
+}
+
+variable "ARM_SUBSCRIPTION_ID" {
+  description = "AWS DEFAULT REGION"
+}
+
+variable "ARM_TENANT_ID" {
+  description = "tenant id"
+}
