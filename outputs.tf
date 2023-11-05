@@ -1,11 +1,15 @@
-output "vmss_public_ip_fqdn" {
-   value = azurerm_public_ip.vmss.fqdn
+output "resource_group_name" {
+  value = azurerm_resource_group.rg.name
 }
 
-output "jumpbox_public_ip_fqdn" {
-   value = azurerm_public_ip.jumpbox.fqdn
+output "virtual_network_name" {
+  value = azurerm_virtual_network.test.name
 }
 
-output "jumpbox_public_ip" {
-   value = azurerm_public_ip.jumpbox.ip_address
+output "subnet_name" {
+  value = azurerm_subnet.test.name
+}
+
+output "linux_virtual_machine_names" {
+  value = [for s in azurerm_linux_virtual_machine.test : s.name[*]]
 }
