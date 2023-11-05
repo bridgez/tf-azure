@@ -9,9 +9,9 @@ terraform {
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
-provider "azurerm" {
-  features {}
-}
+#provider "azurerm" {
+#  features {}
+#}
 
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
