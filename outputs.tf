@@ -1,7 +1,11 @@
-output "resource_group_id" {
-  value = azurerm_resource_group.resourceGroup.id
+output "vmss_public_ip_fqdn" {
+  value = azurerm_public_ip.vmss.fqdn
 }
-#output "public_ip_address" {
-#  value = azurerm_public_ip.publicip
-#}
 
+output "jumpbox_public_ip_fqdn" {
+  value = azurerm_public_ip.jumpbox.fqdn
+}
+
+output "jumpbox_public_ip" {
+  value = azurerm_public_ip.jumpbox.ip_address
+}
