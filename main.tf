@@ -1,10 +1,3 @@
-terraform {
-  cloud {
-    organization = "bridgez"
-    workspaces {
-      name = "tf-azure"      
-    }
-  }
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
@@ -86,7 +79,4 @@ resource "azurerm_linux_virtual_machine" "main" {
       password = self.admin_password
     }
   }
-}
-
-
 }
