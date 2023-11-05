@@ -88,3 +88,19 @@ resource "azurerm_linux_virtual_machine" "main" {
     }
   }
 }
+
+variable "ARM_CLIENT_ID" {
+  description = "ARM_CLIENT_ID"
+}
+
+variable "ARM_CLIENT_SECRET" {
+  description = "client secret"
+}
+
+variable "ARM_SUBSCRIPTION_ID" {
+  description = "AWS DEFAULT REGION"
+}
+
+variable "ARM_TENANT_ID" {
+  description = "tenant id"
+}
