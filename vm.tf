@@ -64,12 +64,12 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
-resource "azurerm_ssh_public_key" "example" {
-  name                = "example"
-  resource_group_name = var.rgname
-  location            = var.location
-  public_key          = file("~/.ssh/id_rsa.pub")
-}
+#resource "azurerm_ssh_public_key" "example" {
+#  name                = "example"
+#  resource_group_name = var.rgname
+#  location            = var.location
+#  public_key          = file("~/.ssh/id_rsa.pub")
+#}
 
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.prefix}-vm"
@@ -108,6 +108,6 @@ resource "azurerm_virtual_machine" "main" {
   tags = {
     environment = "staging"
   }
-  # depends_on = [azurerm_resource_group.azurerm_resource_group]  # 定义虚拟机依赖于资源组
-#  repends_on = [azurerm_resource_group.example]  # 定义虚拟机依赖于资源组
+# depends_on = [azurerm_resource_group.azurerm_resource_group]  # 定义虚拟机依赖于资源组
+# depends_on = [azurerm_resource_group.example]  # 定义虚拟机依赖于资源组
 }
