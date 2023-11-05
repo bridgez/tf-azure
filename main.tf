@@ -94,7 +94,7 @@ resource "azurerm_lb_rule" "lbnatrule" {
    probe_id                       = azurerm_lb_probe.vmss.id
 }
 
-resource "azurerm_virtual_machine_scale_set" "vmss" {
+resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
  name                = "vmscaleset"
  location            = var.location
  resource_group_name = azurerm_resource_group.vmss.name
@@ -165,7 +165,7 @@ resource "azurerm_public_ip" "jumpbox" {
 resource "azurerm_network_interface" "jumpbox" {
  name                = "jumpbox-nic"
  location            = var.location
- #resource_group_name = azurerm_resource_group.vmss.name
+ resource_group_name = azurerm_resource_group.vmss.name
 
  ip_configuration {
    name                          = "IPConfiguration"
