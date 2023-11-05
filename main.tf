@@ -1,10 +1,37 @@
 terraform {
+# following used for cloud
   cloud {
     organization = "bridgez"
     workspaces {
       name = "tf-azure"      
     }
   }
+# following used for local
+  required_version = ">=0.12"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>2.0"
+    }
+  
+}
+# Following used for cloud auth
+
+variable "ARM_CLIENT_ID" {
+  description = "ARM_CLIENT_ID"
+}
+
+variable "ARM_CLIENT_SECRET" {
+  description = "client secret"
+}
+
+variable "ARM_SUBSCRIPTION_ID" {
+  description = "AWS DEFAULT REGION"
+}
+
+variable "ARM_TENANT_ID" {
+  description = "tenant id"
 }
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
@@ -58,7 +85,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   location                        = azurerm_resource_group.main.location
   size                            = "Standard_F2"
   admin_username                  = "adminuser"
-  admin_password                  = "P@ssw0rd1234!"
+  admin_password                  = "Passw0rd!23"
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.main.id,
@@ -89,18 +116,3 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 }
 
-variable "ARM_CLIENT_ID" {
-  description = "ARM_CLIENT_ID"
-}
-
-variable "ARM_CLIENT_SECRET" {
-  description = "client secret"
-}
-
-variable "ARM_SUBSCRIPTION_ID" {
-  description = "AWS DEFAULT REGION"
-}
-
-variable "ARM_TENANT_ID" {
-  description = "tenant id"
-}
