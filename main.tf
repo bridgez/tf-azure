@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "bridgez"
+    workspaces {
+      name = "tf-azure"      
+    }
+  }
+
   required_version = ">=0.12"
   
   required_providers {
