@@ -1,6 +1,12 @@
 # Configure the Azure provider
 # The terraform {} block contains Terraform settings, including the required providers Terraform will use to provision your infrastructure.
 terraform {
+    cloud {
+    organization = "bridgez"
+    workspaces {
+      name = "tf-azure"      
+    }
+  }
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
