@@ -6,14 +6,14 @@ terraform {
     }
   }
 
-  required_version = ">=0.12"
+#  required_version = ">=0.12"
   
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = "~>2.0"
-    }
-  }
+#  required_providers {
+#    azurerm = {
+#      source = "hashicorp/azurerm"
+#      version = "~>2.0"
+#    }
+#  }
 }
 
 #provider "azurerm" {
@@ -30,7 +30,7 @@ resource "random_string" "fqdn" {
  length  = 6
  special = false
  upper   = false
- number  = false
+ numeric  = false
 }
 
 resource "azurerm_virtual_network" "vmss" {
@@ -89,7 +89,7 @@ resource "azurerm_lb_rule" "lbnatrule" {
    protocol                       = "Tcp"
    frontend_port                  = var.application_port
    backend_port                   = var.application_port
-   backend_address_pool_id        = azurerm_lb_backend_address_pool.bpepool.id
+#   backend_address_pool_id        = azurerm_lb_backend_address_pool.bpepool.id
    frontend_ip_configuration_name = "PublicIPAddress"
    probe_id                       = azurerm_lb_probe.vmss.id
 }
