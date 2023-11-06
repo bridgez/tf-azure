@@ -1,5 +1,5 @@
 variable "ARM_CLIENT_ID" {
-  description = "ARM_CLIENT_ID"
+  description = "ARM CLIENT ID"
 }
 variable "ARM_CLIENT_SECRET" {
   description = "ARM_CLIENT_SECRET"
