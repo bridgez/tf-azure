@@ -1,4 +1,17 @@
 # from official website: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_machine
+variable "ARM_CLIENT_ID" {
+  description = "ARM_CLIENT_ID"
+}
+variable "ARM_CLIENT_SECRET" {
+  description = "ARM_CLIENT_SECRET"
+}
+variable "ARM_SUBSCRIPTION_ID" {
+  description = "ARM_SUBSCRIPTION_ID"
+}
+
+variable "ARM_TENANT_ID" {
+  description = "ARM_TENANT_ID"
+}
 
 
 # for label use
@@ -68,7 +81,7 @@ resource "azurerm_ssh_public_key" "example" {
   name                = "example"
   resource_group_name = var.rgname
   location            = var.location
-  public_key          = file("~/.ssh/id_rsa.pub")
+  public_key          = file("./id_rsa.pub")
 }
 
 resource "azurerm_virtual_machine" "main" {
