@@ -11,6 +11,11 @@ variable "location" {
   description = "The Azure Region in which all resources in this example should be created."
 }
 
+variable "azurerm_public_ip" {
+  description = "azurerm_public_ip"
+}
+
+
 variable "tags" {
   description = "Map of the tags to use for the resources that are deployed"
   type        = map(string)
