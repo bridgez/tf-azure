@@ -8,7 +8,7 @@ resource "random_string" "fqdn" {
   length  = 6
   special = false
   upper   = false
-  number  = false
+  numeric  = false
 }
 
 resource "azurerm_virtual_network" "vmss" {
@@ -54,7 +54,7 @@ resource "azurerm_lb_backend_address_pool" "bpepool" {
 }
 
 resource "azurerm_lb_probe" "vmss" {
-  resource_group_name = azurerm_resource_group.vmss.name
+#  resource_group_name = azurerm_resource_group.vmss.name
   loadbalancer_id     = azurerm_lb.vmss.id
   name                = "ssh-running-probe"
   port                = var.application_port
@@ -72,7 +72,7 @@ resource "azurerm_lb_rule" "lbnatrule" {
   probe_id                       = azurerm_lb_probe.vmss.id
 }
 
-resource "azurerm_virtual_machine_scale_set" "vmss" {
+resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                = "vmscaleset"
   location            = var.location
   resource_group_name = azurerm_resource_group.vmss.name
