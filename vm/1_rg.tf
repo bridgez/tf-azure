@@ -42,19 +42,19 @@ provider "azurerm" {
 # Use resource blocks to define components of your infrastructure. 
 # avoid the same name, or terraform state list and terraform state rm is needed
 
-resource "azurerm_resource_group" "resourceGroup" {
-  location = var.location # "East Asia"
-  name     = var.rgname
-}
+# resource "azurerm_resource_group" "resourceGroup" {
+#   location = var.location # "East Asia"
+#   name     = var.rgname
+# }
 
-resource "azurerm_resource_group" "newResourceGroup" {
-  location = var.location
-  name     = "Terraform_Test1"
-  tags = { # from here three lines are added.
-    Environment = "Terraform Getting Started"
-    Team        = "DevOps"
-  }
-}
+# resource "azurerm_resource_group" "newResourceGroup" {
+#   location = var.location
+#   name     = "Terraform_Test1"
+#   tags = { # from here three lines are added.
+#     Environment = "Terraform Getting Started"
+#     Team        = "DevOps"
+#   }
+# }
 
 
 

@@ -11,14 +11,14 @@ variable "prefix" {
 resource "azurerm_virtual_network" "vnet" {
   name                = "${var.prefix}-network"
   address_space       = ["192.168.0.0/16"]
-  location            = var.location
-  resource_group_name = var.rgname # azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name # azurerm_resource_group.rg.name
 }
 
 # Create subnet
 resource "azurerm_subnet" "internal" {
   name                 = "subnet-eastasia-001"
-  resource_group_name  = var.rgname
+  resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["192.168.0.0/24"] #      = "192.168.0.0/24"
 }
@@ -26,16 +26,16 @@ resource "azurerm_subnet" "internal" {
 # Create public IP, which you can search public ip on the search bar
 resource "azurerm_public_ip" "publicip" {
   name                = "pip-eastasia-001"
-  location            = var.location
-  resource_group_name = var.rgname
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
 }
 
 # Create network security group and rule, network security groups
 resource "azurerm_network_security_group" "nsg" {
   name                = "nsg-sshallow-001"
-  location            = var.location
-  resource_group_name = var.rgname
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 
   security_rule {
     name                       = "SSH"
@@ -53,8 +53,8 @@ resource "azurerm_network_security_group" "nsg" {
 # Create network interface
 resource "azurerm_network_interface" "main" {
   name                = "${var.prefix}-nic"
-  location            = var.location
-  resource_group_name = var.rgname
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   #network_security_group_id = azurerm_network_security_group.nsg.id
 
   ip_configuration {
@@ -67,15 +67,15 @@ resource "azurerm_network_interface" "main" {
 
 resource "azurerm_ssh_public_key" "example" {
   name                = "example"
-  resource_group_name = var.rgname
-  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
   public_key          = file("./id_rsa.pub")
 }
 
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.prefix}-vm"
-  location              = var.location
-  resource_group_name   = var.rgname
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.main.id]
   vm_size               = "Standard_DS1_v2"
 
