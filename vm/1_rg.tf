@@ -40,9 +40,9 @@ variable "azurerm_resource_group" {
 }
 
 # The provider block configures the specified provider, in this case azurerm. A provider is a plugin that Terraform uses to create and manage your resources.
-provider "azurerm" {
-  features {} #  At least 1 "features" blocks are required. 
-}
+#provider "azurerm" {
+#  features {} #  At least 1 "features" blocks are required. 
+#}
 
 # Use resource blocks to define components of your infrastructure. 
 # avoid the same name, or terraform state list and terraform state rm is needed
