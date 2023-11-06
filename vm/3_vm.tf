@@ -1,114 +1,64 @@
 # from official website: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_machine
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
 
-
-# for label use
-variable "prefix" {
-  default = "tf-1102"
+provider "azurerm" {
+  features {}
 }
 
-# Create a virtual network
-resource "azurerm_virtual_network" "vnet" {
+resource "azurerm_resource_group" "main" {
+  name     = "${var.prefix}-resources"
+  location = var.location
+}
+
+resource "azurerm_virtual_network" "main" {
   name                = "${var.prefix}-network"
-  address_space       = ["192.168.0.0/16"]
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name # azurerm_resource_group.rg.name
+  address_space       = ["10.0.0.0/22"]
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
 }
 
-# Create subnet
 resource "azurerm_subnet" "internal" {
-  name                 = "subnet-eastasia-001"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["192.168.0.0/24"] #      = "192.168.0.0/24"
+  name                 = "internal"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.main.name
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
-# Create public IP, which you can search public ip on the search bar
-resource "azurerm_public_ip" "publicip" {
-  name                = "pip-eastasia-001"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-}
-
-# Create network security group and rule, network security groups
-resource "azurerm_network_security_group" "nsg" {
-  name                = "nsg-sshallow-001"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 1001
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
-
-# Create network interface
 resource "azurerm_network_interface" "main" {
   name                = "${var.prefix}-nic"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  #network_security_group_id = azurerm_network_security_group.nsg.id
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
 
   ip_configuration {
-    name                          = "niccfg-vmterraform"
+    name                          = "internal"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.publicip.id
   }
 }
 
-resource "azurerm_ssh_public_key" "example" {
-  name                = "example"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  public_key          = file("./id_rsa.pub")
-}
+resource "azurerm_linux_virtual_machine" "main" {
+  name                            = "${var.prefix}-vm"
+  resource_group_name             = azurerm_resource_group.main.name
+  location                        = azurerm_resource_group.main.location
+  size                            = "Standard_D2s_v3"
+  admin_username                  = "${var.username}"
+  admin_password                  = "${var.password}"
+  disable_password_authentication = false
+  network_interface_ids = [
+    azurerm_network_interface.main.id,
+  ]
 
-resource "azurerm_virtual_machine" "main" {
-  name                  = "${var.prefix}-vm"
-  location              = azurerm_resource_group.rg.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size               = "Standard_DS1_v2"
-
-  # Uncomment this line to delete the OS disk automatically when deleting the VM
-  delete_os_disk_on_termination = true
-
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  delete_data_disks_on_termination = true
-
-  storage_image_reference {
+  source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts"
-    version   = "22.04.202301100" # "latest"
-  }
-  storage_os_disk {
-    name              = "myosdisk1"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  os_profile {
-    computer_name  = "hostname"
-    admin_username = "bridgez"
-    admin_password = "Password1234!"
+    version   = "latest"
   }
 
-  os_profile_linux_config {
-    disable_password_authentication = false
+  os_disk {
+    storage_account_type = "Standard_LRS"
+    caching              = "ReadWrite"
   }
-  tags = {
-    environment = "staging"
-  }
-  # depends_on = [azurerm_resource_group.azurerm_resource_group]  # 定义虚拟机依赖于资源组
-#  repends_on = [azurerm_resource_group.example]  # 定义虚拟机依赖于资源组
 }
