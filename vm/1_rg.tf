@@ -29,6 +29,11 @@ variable "ARM_SUBSCRIPTION_ID" {
 variable "ARM_TENANT_ID" {
   description = "ARM_TENANT_ID"
 }
+
+
+variable "admin_password" {
+  description = "admin_password"
+}
 # The provider block configures the specified provider, in this case azurerm. A provider is a plugin that Terraform uses to create and manage your resources.
 provider "azurerm" {
   features {} #  At least 1 "features" blocks are required. 
