@@ -10,3 +10,13 @@ variable "location" {
   description = "The Azure Region in which all resources in this example should be created."
   default = "east asia"
 }
+
+variable "username" {
+  description = "The Azure Region in which all resources in this example should be created."
+  default = "admin"
+}
+
+variable "password" {
+  description = "The Azure Region in which all resources in this example should be created."
+  default = "Passw0rd!23"
+}
