@@ -31,9 +31,6 @@ variable "ARM_TENANT_ID" {
 }
 
 
-variable "admin_password" {
-  description = "admin_password"
-}
 variable "azurerm_resource_group" {
   description = "resource group"
   default = "Terraform1106"
