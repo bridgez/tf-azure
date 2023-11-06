@@ -3,9 +3,12 @@ variable "resource_group_name" {
   default     = "myResourceGroup"
 }
 
+variable "prefix" {
+  description = "The prefix which should be used for all resources in this example"
+}
+
 variable "location" {
-  default     = "eastus"
-  description = "Location where resources will be created"
+  description = "The Azure Region in which all resources in this example should be created."
 }
 
 variable "tags" {
