@@ -25,7 +25,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "main" {
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
   sku                             = "Standard_F2"
-  instances                       = 5
+  instances                       = 4
   admin_username                  = "adminuser"
   admin_password                  = "P@ssw0rd1234!"
   disable_password_authentication = false
