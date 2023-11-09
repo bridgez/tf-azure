@@ -96,7 +96,7 @@ resource "random_pet" "azurerm_linux_virtual_machine_name" {
 }
 
 resource "azurerm_linux_virtual_machine" "test" {
-  count                 = 3
+  count                 = 2
   name                  = "${random_pet.azurerm_linux_virtual_machine_name.id}${count.index}"
   location              = azurerm_resource_group.rg.location
   availability_set_id   = azurerm_availability_set.avset.id
