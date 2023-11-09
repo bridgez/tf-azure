@@ -27,7 +27,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "main" {
   sku                             = "Standard_F2"
   instances                       = 5
   admin_username                  = "adminuser"
-  admin_password                  = "P@ssw0rd1234!"
+  admin_password                  = "P@ssw0rd!23"
   disable_password_authentication = false
 
   source_image_reference {
