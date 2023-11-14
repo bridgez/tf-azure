@@ -3,7 +3,7 @@
 
 variable "prefix" {
   description = "A prefix used for all resources in this example"
-  deault = "bridge1114"
+  default = "bridge1114"
 }
 
 variable "location" {
