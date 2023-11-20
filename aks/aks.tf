@@ -17,6 +17,11 @@ resource "azurerm_kubernetes_cluster" "example" {
   resource_group_name = azurerm_resource_group.example.name
   dns_prefix          = "${var.prefix}-k8s-${count.index + 1}"
 
+  tags = {
+    env = "cdt"
+    # 其他标签键值对
+  }
+
   default_node_pool {
     name       = "default"
     node_count = 1
