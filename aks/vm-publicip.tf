@@ -1,7 +1,3 @@
-#provider "azurerm" {
-#  features {}
-#}
-
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
   location = var.location
@@ -22,27 +18,30 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_public_ip" "main" {
-  name                = "${var.prefix}-pip"
+  count               = 3  # 虚拟机数量
+  name                = "${var.prefix}-pip-${count.index}"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   allocation_method   = "Static"
 }
 
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
+  count               = 3  # 虚拟机数量
+  name                = "${var.prefix}-nic-${count.index}"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
 
   ip_configuration {
-    name                          = "internal"
+    name                          = "internal-${count.index}"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.main.id
+    public_ip_address_id          = azurerm_public_ip.main[count.index].id
   }
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
-  name                            = "${var.prefix}-vm"
+  count                           = 3  # 虚拟机数量
+  name                            = "${var.prefix}-vm-${count.index}"
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
   size                            = "Standard_D2s_v3"
@@ -51,7 +50,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   disable_password_authentication = false
 
   network_interface_ids = [
-    azurerm_network_interface.main.id,
+    azurerm_network_interface.main[count.index].id,
   ]
 
   source_image_reference {
