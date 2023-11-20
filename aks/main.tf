@@ -9,12 +9,15 @@ resource "azurerm_resource_group" "example" {
   name     = "${var.prefix}-k8s-resources"
   location = var.location
 }
-
+variable "aks_count" {
+  default = 2  # 你想要的 AKS 集群数量
+}
 resource "azurerm_kubernetes_cluster" "example" {
-  name                = "${var.prefix}-k8s"
+  count               = var.aks_count
+  name                = "${var.prefix}-k8s-${count.index + 1}"  # "${var.prefix}-k8s"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  dns_prefix          = "${var.prefix}-k8s"
+  dns_prefix          = "${var.prefix}-k8s-${count.index + 1}" # "${var.prefix}-k8s"
 
   default_node_pool {
     name       = "default"
