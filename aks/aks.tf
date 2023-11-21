@@ -19,6 +19,12 @@ resource "azurerm_kubernetes_cluster" "example" {
     # 其他标签键值对
   }
 
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_DS2_v2"
+  }
+
   dynamic "node_pool" {
     for_each = var.node_pools
 
@@ -41,11 +47,6 @@ variable "node_pools" {
     vm_size    = string
   }))
   default = {
-    default = {
-      node_count = 1
-      vm_size    = "Standard_DS2_v2"
-    },
-    # 可以根据需要添加其他节点池
     busy = {
       node_count = 5
       vm_size    = "Standard_DS2_v2"
