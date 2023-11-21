@@ -8,47 +8,54 @@ resource "azurerm_resource_group" "example" {
 }
 
 variable "node_pools" {
-  type = list(object({
-    name       = string
-    vm_size    = string
-    node_count = number
+  type = map(object({
+    vm_size             = string
+    node_count          = number
+    enable_auto_scaling = bool
+    min_count           = number
+    max_count           = number
   }))
-  default = [
-    {
-      name       = "default"
-      vm_size    = "Standard_DS2_v2"
-      node_count = 1
+  default = {
+    default = {
+      vm_size             = "Standard_DS2_v2"
+      node_count          = 1
       enable_auto_scaling = true
       min_count           = 1
-      max_count           = 3  # 最大节点数
-    },
-    {
-      name       = "advanced"
-      vm_size    = "Standard_DS3_v2"  # 更高级别的 vm_size
-      node_count = 1
-      enable_auto_scaling = true
+      max_count           = 3
+    }
+    advanced = {
+      vm_size             = "Standard_DS3_v2"
+      node_count          = 1
+      enable_auto_scaling = false  # 手动伸缩
       min_count           = 1
-      max_count           = 3  # 最大节点数
-    },
-  ]
+      max_count           = 3
+    }
+  }
 }
 
 resource "azurerm_kubernetes_cluster" "example" {
-  count               = length(var.node_pools)
-  name                = "${var.prefix}-k8s-${count.index + 1}"
+  for_each            = var.node_pools
+  name                = "${var.prefix}-k8s-${each.key}"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  dns_prefix          = "${var.prefix}-k8s-${count.index + 1}"
+  dns_prefix          = "${var.prefix}-k8s-${each.key}"
 
-  default_node_pool {
-    name       = var.node_pools[count.index].name
-    vm_size    = var.node_pools[count.index].vm_size
-    node_count = var.node_pools[count.index].node_count
+  dynamic "node_pool" {
+    for_each = [1]  # 固定值 [1] 表示每个节点池都会被创建
+    content {
+      name       = each.key
+      vm_size    = each.value.vm_size
+      node_count = each.value.node_count
+
+      enable_auto_scaling = each.value.enable_auto_scaling
+      min_count           = each.value.min_count
+      max_count           = each.value.max_count
+    }
   }
 
   identity {
     type = "SystemAssigned"
   }
 
-  kubernetes_version = "1.27.7"  # 指定的 Kubernetes 版本
+  kubernetes_version = "1.27.7"
 }
