@@ -1,6 +1,3 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
 provider "azurerm" {
   features {}
 }
@@ -22,15 +19,36 @@ resource "azurerm_kubernetes_cluster" "example" {
     # 其他标签键值对
   }
 
-  default_node_pool {
-    name       = "default"
-    node_count = 1
-    vm_size    = "Standard_DS2_v2"
+  dynamic "node_pool" {
+    for_each = var.node_pools
+
+    content {
+      name       = node_pool.key
+      node_count = node_pool.value["node_count"]
+      vm_size    = node_pool.value["vm_size"]
+    }
   }
 
   identity {
     type = "SystemAssigned"
   }
   kubernetes_version = "1.27.7"  # 指定的 Kubernetes 版本
+}
 
+variable "node_pools" {
+  type = map(object({
+    node_count = number
+    vm_size    = string
+  }))
+  default = {
+    default = {
+      node_count = 1
+      vm_size    = "Standard_DS2_v2"
+    },
+    # 可以根据需要添加其他节点池
+    busy = {
+      node_count = 5
+      vm_size    = "Standard_DS2_v2"
+    }
+  }
 }
