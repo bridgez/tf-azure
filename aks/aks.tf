@@ -31,4 +31,6 @@ resource "azurerm_kubernetes_cluster" "example" {
   identity {
     type = "SystemAssigned"
   }
+  kubernetes_version = "1.27.7"  # 指定的 Kubernetes 版本
+
 }
