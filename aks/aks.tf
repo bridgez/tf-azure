@@ -21,7 +21,7 @@ variable "node_pools" {
     },
     {
       name       = "busy"
-      node_count = 5
+      node_count = 2
       vm_size    = "Standard_DS2_v2"
     },
   ]
