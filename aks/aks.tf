@@ -18,11 +18,17 @@ variable "node_pools" {
       name       = "default"
       vm_size    = "Standard_DS2_v2"
       node_count = 1
+      enable_auto_scaling = true
+      min_count           = 1
+      max_count           = 3  # 最大节点数
     },
     {
       name       = "advanced"
       vm_size    = "Standard_DS3_v2"  # 更高级别的 vm_size
       node_count = 1
+      enable_auto_scaling = true
+      min_count           = 1
+      max_count           = 3  # 最大节点数
     },
   ]
 }
