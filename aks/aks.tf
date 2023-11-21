@@ -25,31 +25,14 @@ resource "azurerm_kubernetes_cluster" "example" {
     vm_size    = "Standard_DS2_v2"
   }
 
-  dynamic "node_pool" {
-    for_each = var.node_pools
-
-    content {
-      name       = node_pool.key
-      node_count = node_pool.value["node_count"]
-      vm_size    = node_pool.value["vm_size"]
-    }
+  node_pool {
+    name       = "busy"
+    node_count = 5
+    vm_size    = "Standard_DS2_v2"
   }
 
   identity {
     type = "SystemAssigned"
   }
   kubernetes_version = "1.27.7"  # 指定的 Kubernetes 版本
-}
-
-variable "node_pools" {
-  type = map(object({
-    node_count = number
-    vm_size    = string
-  }))
-  default = {
-    busy = {
-      node_count = 5
-      vm_size    = "Standard_DS2_v2"
-    }
-  }
 }
