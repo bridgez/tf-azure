@@ -35,6 +35,9 @@ resource "azurerm_kubernetes_cluster" "example" {
     name       = var.node_pools[count.index].name
     vm_size    = var.node_pools[count.index].vm_size
     node_count = 1  # 最小节点数
+    enable_auto_scaling = true
+    min_count           = 1
+    max_count           = 5  # 最大节点数
   }
 
   identity {
