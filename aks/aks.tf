@@ -28,14 +28,14 @@ variable "node_pools" {
 }
 
 resource "azurerm_kubernetes_cluster" "example" {
-  count               = 2
+  count               = length(var.node_pools)
   name                = "${var.prefix}-k8s-${count.index + 1}"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   dns_prefix          = "${var.prefix}-k8s-${count.index + 1}"
 
   dynamic "node_pool" {
-    for_each = var.node_pools
+    for_each = var.node_pools[count.index]
 
     content {
       name       = node_pool.value.name
