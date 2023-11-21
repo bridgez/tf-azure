@@ -18,7 +18,7 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_public_ip" "main" {
-  count               = 2  # 虚拟机数量
+  count               = 3  # 虚拟机数量
   name                = "${var.prefix}-pip-${count.index}"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
