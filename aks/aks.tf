@@ -31,17 +31,10 @@ resource "azurerm_kubernetes_cluster" "example" {
   resource_group_name = azurerm_resource_group.example.name
   dns_prefix          = "${var.prefix}-k8s-${count.index + 1}"
 
-  dynamic "default_node_pool" {
-    for_each = var.node_pools
-
-    content {
-      name       = default_node_pool.value.name
-      vm_size    = default_node_pool.value.vm_size
-      node_count = 1  # 最小节点数
-      enable_auto_scaling = true
-      min_count           = 1
-      max_count           = 5  # 最大节点数
-    }
+  default_node_pool {
+    name       = var.node_pools[count.index].name
+    vm_size    = var.node_pools[count.index].vm_size
+    node_count = 1  # 最小节点数
   }
 
   identity {
