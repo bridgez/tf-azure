@@ -26,8 +26,6 @@ variable "node_pools" {
       name       = "busy"
       node_count = 2
       enable_auto_scaling = false
-   #   min_count          = 1
-   #   max_count          = 3
       vm_size    = "Standard_DS2_v2"
     },
   ]
