@@ -34,16 +34,18 @@ variable "node_pools" {
 }
 
 resource "azurerm_kubernetes_cluster" "example" {
-  count               = length(var.node_pools)
+  count               = 2 # length(var.node_pools)
   name                = "${var.prefix}-k8s-${count.index + 1}"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   dns_prefix          = "${var.prefix}-k8s-${count.index + 1}"
 
   default_node_pool {
-    name       = var.node_pools[count.index].name
-    node_count = var.node_pools[count.index].node_count
-    vm_size    = var.node_pools[count.index].vm_size
+    name       = "default"
+    node_count = 1
+    min_count  = 1
+    max_count  = 3
+    vm_size    = "Standard_DS2_v2"
   }
 
   identity {
